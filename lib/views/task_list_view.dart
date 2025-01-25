@@ -1,6 +1,7 @@
 // lib/views/task_list_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:task_management_app/models/app_preferences.dart';
 import 'package:task_management_app/providers/preference_provider.dart';
 import 'package:uuid/uuid.dart';
 import '../providers/task_provider.dart';
@@ -11,8 +12,8 @@ class TaskListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasksAsync = ref.watch(taskNotifierProvider);
-    final preferences = ref.watch(preferencesNotifierProvider);
+    final AsyncValue<List<Task>> tasksAsync = ref.watch(taskNotifierProvider);
+    final AppPreferences preferences = ref.watch(preferencesNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,38 +27,39 @@ class TaskListView extends ConsumerWidget {
               ref.read(preferencesNotifierProvider.notifier).updateTheme(
                   preferences.theme == AppTheme.light
                       ? AppTheme.dark
-                      : AppTheme.light
-              );
+                      : AppTheme.light);
             },
           ),
           // Sort Order Dropdown
           PopupMenuButton<TaskSortOrder>(
             icon: const Icon(Icons.sort),
             onSelected: (TaskSortOrder sortOrder) {
-              ref.read(preferencesNotifierProvider.notifier).updateSortOrder(sortOrder);
+              ref
+                  .read(preferencesNotifierProvider.notifier)
+                  .updateSortOrder(sortOrder);
             },
             itemBuilder: (BuildContext context) =>
                 TaskSortOrder.values.map((TaskSortOrder sortOrder) {
-                  return PopupMenuItem<TaskSortOrder>(
-                    value: sortOrder,
-                    child: Text(sortOrder.toString().split('.').last),
-                  );
-                }).toList(),
+              return PopupMenuItem<TaskSortOrder>(
+                value: sortOrder,
+                child: Text(sortOrder.toString().split('.').last),
+              );
+            }).toList(),
           ),
-
         ],
       ),
       body: tasksAsync.when(
         data: (tasks) {
           // Apply sorting based on preferences
-          final sortedTasks = _sortTasks(tasks, preferences.sortOrder);
+          final List<Task> sortedTasks =
+              _sortTasks(tasks, preferences.sortOrder);
           return ListView.builder(
-          itemCount: sortedTasks.length,
-          itemBuilder: (context, index) {
-            final task = sortedTasks[index];
-            return TaskListItem(task: task);
-          },
-        );
+            itemCount: sortedTasks.length,
+            itemBuilder: (context, index) {
+              final task = sortedTasks[index];
+              return TaskListItem(task: task);
+            },
+          );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
@@ -71,26 +73,23 @@ class TaskListView extends ConsumerWidget {
     );
   }
 
-
   // Sorting method for tasks
   List<Task> _sortTasks(List<Task> tasks, TaskSortOrder sortOrder) {
     switch (sortOrder) {
       case TaskSortOrder.byDate:
-        return List.from(tasks)..sort((a, b) =>
-            (a.dueDate ?? a.createdAt).compareTo(b.dueDate ?? b.createdAt));
-      case TaskSortOrder.byCreationDate:
-        return List.from(tasks)..sort((a, b) =>
-            a.createdAt.compareTo(b.createdAt));
+        return List.from(tasks)
+          ..sort((a, b) =>
+              (a.dueDate ?? a.createdAt).compareTo(b.dueDate ?? b.createdAt));
       case TaskSortOrder.byPriority:
-      // Assuming we might add priority later
+        // Assuming we might add priority later
         return tasks;
     }
   }
 
   // Dialog to add new task
   void _showAddTaskDialog(BuildContext context, WidgetRef ref) {
-    final titleController = TextEditingController();
-    final descriptionController = TextEditingController();
+    final TextEditingController titleC = TextEditingController();
+    final TextEditingController descriptionC = TextEditingController();
 
     showDialog(
       context: context,
@@ -101,13 +100,13 @@ class TaskListView extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: titleController,
+                controller: titleC,
                 decoration: const InputDecoration(
                   hintText: 'Task Title',
                 ),
               ),
               TextField(
-                controller: descriptionController,
+                controller: descriptionC,
                 decoration: const InputDecoration(
                   hintText: 'Description (Optional)',
                 ),
@@ -121,13 +120,12 @@ class TaskListView extends ConsumerWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                if (titleController.text.isNotEmpty) {
-                  final newTask = Task(
+                if (titleC.text.isNotEmpty) {
+                  final Task newTask = Task(
                     id: const Uuid().v4(), // Generate unique ID
-                    title: titleController.text,
-                    description: descriptionController.text.isNotEmpty
-                        ? descriptionController.text
-                        : null,
+                    title: titleC.text,
+                    description:
+                        descriptionC.text.isNotEmpty ? descriptionC.text : null,
                     createdAt: DateTime.now(),
                     status: TaskStatus.pending,
                   );
@@ -143,8 +141,6 @@ class TaskListView extends ConsumerWidget {
       },
     );
   }
-
-
 }
 
 class TaskListItem extends ConsumerWidget {
@@ -167,9 +163,7 @@ class TaskListItem extends ConsumerWidget {
         onChanged: (bool? value) {
           // Toggle task status
           final updatedTask = task.copyWith(
-            status: value == true
-                ? TaskStatus.completed
-                : TaskStatus.pending,
+            status: value == true ? TaskStatus.completed : TaskStatus.pending,
             completedAt: value == true ? DateTime.now() : null,
           );
 
@@ -192,7 +186,9 @@ class TaskListItem extends ConsumerWidget {
               ElevatedButton(
                 onPressed: () {
                   if (task.id != null) {
-                    ref.read(taskNotifierProvider.notifier).deleteTask(task.id!);
+                    ref
+                        .read(taskNotifierProvider.notifier)
+                        .deleteTask(task.id!);
                   }
                   Navigator.of(context).pop();
                 },
