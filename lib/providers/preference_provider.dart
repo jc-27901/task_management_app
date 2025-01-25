@@ -3,7 +3,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_management_app/data/preference_data_source.dart';
-import 'package:task_management_app/models/app_preferences.dart';
+import 'package:task_management_app/providers/app_preferences.dart';
 
 class PreferencesNotifier extends StateNotifier<AppPreferences> {
   final PreferencesDataSource _dataSource = PreferencesDataSource();

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_management_app/models/app_preferences.dart';
+import 'package:task_management_app/providers/app_preferences.dart';
 import 'package:task_management_app/providers/preference_provider.dart';
 import 'views/task_list_view.dart';
 

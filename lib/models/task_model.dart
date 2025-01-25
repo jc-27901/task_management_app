@@ -1,8 +1,17 @@
 // lib/models/task_model.dart
 
-enum TaskStatus {
-  pending,
-  completed
+enum TaskStatus { pending, completed }
+
+enum TaskPriority { high, medium, low }
+
+enum TaskType {
+  codeReview('Code Review'),
+  meeting('Meeting'),
+  development('Development'),
+  others('Others');
+
+  final String name;
+  const TaskType(this.name);
 }
 
 class Task {
@@ -13,6 +22,8 @@ class Task {
   DateTime? completedAt;
   TaskStatus status;
   DateTime? dueDate;
+  TaskPriority? taskPriority;
+  TaskType taskType;
 
   Task({
     this.id,
@@ -22,6 +33,8 @@ class Task {
     this.completedAt,
     this.status = TaskStatus.pending,
     this.dueDate,
+    this.taskPriority,
+    this.taskType = TaskType.others
   });
 
   // Manual JSON serialization
@@ -34,6 +47,8 @@ class Task {
       'completedAt': completedAt?.toIso8601String(),
       'status': status.toString().split('.').last,
       'dueDate': dueDate?.toIso8601String(),
+      'taskPriority': taskPriority.toString().split('.').last,
+      'taskType' : taskType.toString().split('.').last
     };
   }
 
@@ -46,12 +61,13 @@ class Task {
       completedAt: json['completedAt'] != null
           ? DateTime.parse(json['completedAt'])
           : null,
-      status: TaskStatus.values.firstWhere(
-              (e) => e.toString().split('.').last == json['status']
-      ),
-      dueDate: json['dueDate'] != null
-          ? DateTime.parse(json['dueDate'])
-          : null,
+      status: TaskStatus.values
+          .firstWhere((e) => e.toString().split('.').last == json['status']),
+      dueDate: json['dueDate'] != null ? DateTime.parse(json['dueDate']) : null,
+      taskPriority: TaskPriority.values.firstWhere(
+          (e) => e.toString().split('.').last == json['taskPriority']),
+      taskType: TaskType.values.firstWhere(
+              (e) => e.toString().split('.').last == json['taskType']),
     );
   }
 
@@ -64,16 +80,16 @@ class Task {
     DateTime? completedAt,
     TaskStatus? status,
     DateTime? dueDate,
+    TaskPriority? taskPriority,
   }) {
     return Task(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      createdAt: createdAt ?? this.createdAt,
-      completedAt: completedAt ?? this.completedAt,
-      status: status ?? this.status,
-      dueDate: dueDate ?? this.dueDate,
-    );
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        createdAt: createdAt ?? this.createdAt,
+        completedAt: completedAt ?? this.completedAt,
+        status: status ?? this.status,
+        dueDate: dueDate ?? this.dueDate,
+        taskPriority: taskPriority ?? this.taskPriority);
   }
 }
-

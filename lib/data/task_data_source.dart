@@ -22,7 +22,7 @@ class TaskDataSource {
       join(await getDatabasesPath(), 'tasks_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE tasks(id TEXT PRIMARY KEY, title TEXT, description TEXT, createdAt TEXT, completedAt TEXT, status TEXT, dueDate TEXT)',
+          'CREATE TABLE tasks(id TEXT PRIMARY KEY, title TEXT, description TEXT, createdAt TEXT, completedAt TEXT, status TEXT, dueDate TEXT, taskPriority TEXT, taskType TEXT)',
         );
       },
       version: 1,

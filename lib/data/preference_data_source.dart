@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_management_app/models/app_preferences.dart';
+import 'package:task_management_app/providers/app_preferences.dart';
 
 class PreferencesDataSource {
   static final PreferencesDataSource _instance = PreferencesDataSource._internal();
