@@ -39,13 +39,13 @@ class TaskDataSource {
   }
 
   Future<List<Task>> getTasks() async {
-    final db = await database;
+    final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query('tasks');
     return maps.map((map) => Task.fromJson(map)).toList();
   }
 
   Future<void> updateTask(Task task) async {
-    final db = await database;
+    final Database db = await database;
     await db.update(
       'tasks',
       task.toJson(),
@@ -55,7 +55,7 @@ class TaskDataSource {
   }
 
   Future<void> deleteTask(String taskId) async {
-    final db = await database;
+    final Database db = await database;
     await db.delete(
       'tasks',
       where: 'id = ?',

@@ -1,16 +1,30 @@
 // lib/models/app_preferences.dart
+import 'package:hive/hive.dart';
+
+part 'app_preferences.g.dart';
+
+@HiveType(typeId: 1)
 enum AppTheme {
+  @HiveField(0)
   light,
+  @HiveField(1)
   dark
 }
 
+@HiveType(typeId: 2)
 enum TaskSortOrder {
+  @HiveField(0)
   byDate,
+  @HiveField(1)
   byPriority
 }
 
-class AppPreferences {
+@HiveType(typeId: 0)
+class AppPreferences extends HiveObject {
+  @HiveField(0)
   AppTheme theme;
+
+  @HiveField(1)
   TaskSortOrder sortOrder;
 
   AppPreferences({

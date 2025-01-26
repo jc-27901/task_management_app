@@ -12,7 +12,7 @@ class TaskNotifier extends StateNotifier<AsyncValue<List<Task>>> {
 
   Future<void> _loadTasks() async {
     try {
-      final tasks = await _dataSource.getTasks();
+      final List<Task> tasks = await _dataSource.getTasks();
       state = AsyncValue.data(tasks);
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
@@ -32,9 +32,8 @@ class TaskNotifier extends StateNotifier<AsyncValue<List<Task>>> {
   Future<void> updateTask(Task task) async {
     try {
       await _dataSource.updateTask(task);
-      final updatedTasks = state.value!.map((t) =>
-      t.id == task.id ? task : t
-      ).toList();
+      final updatedTasks =
+          state.value!.map((t) => t.id == task.id ? task : t).toList();
       state = AsyncValue.data(updatedTasks);
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
@@ -53,7 +52,8 @@ class TaskNotifier extends StateNotifier<AsyncValue<List<Task>>> {
 }
 
 // Create a provider for the TaskNotifier
-final taskNotifierProvider = StateNotifierProvider<TaskNotifier, AsyncValue<List<Task>>>((ref) {
+final StateNotifierProvider<TaskNotifier, AsyncValue<List<Task>>>
+    taskNotifierProvider =
+    StateNotifierProvider<TaskNotifier, AsyncValue<List<Task>>>((ref) {
   return TaskNotifier();
 });
-
