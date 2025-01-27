@@ -1,9 +1,8 @@
 // lib/providers/preferences_provider.dart
 
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_management_app/data/preference_data_source.dart';
-import 'package:task_management_app/models/app_preferences.dart';
+import 'package:task_management_app/providers/app_preferences.dart';
 
 class PreferencesNotifier extends StateNotifier<AppPreferences> {
   final PreferencesDataSource _dataSource = PreferencesDataSource();
@@ -31,6 +30,8 @@ class PreferencesNotifier extends StateNotifier<AppPreferences> {
 }
 
 // Create a provider for the PreferencesNotifier
-final preferencesNotifierProvider = StateNotifierProvider<PreferencesNotifier, AppPreferences>((ref) {
+final StateNotifierProvider<PreferencesNotifier, AppPreferences>
+    preferencesNotifierProvider =
+    StateNotifierProvider<PreferencesNotifier, AppPreferences>((ref) {
   return PreferencesNotifier();
 });
