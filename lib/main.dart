@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_management_app/data/preference_data_source.dart';
 import 'package:task_management_app/providers/app_preferences.dart';
 import 'package:task_management_app/providers/preference_provider.dart';
-import 'views/task_list_view.dart';
+import 'views/task_list/task_list_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
