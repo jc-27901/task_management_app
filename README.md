@@ -1,16 +1,48 @@
-# task_management_app
+# Task Management App
 
-A new Flutter project.
+A feature-rich Flutter task management application showcasing modern architecture and best practices. This app demonstrates the implementation of MVVM architecture, state management with Riverpod, local data persistence using both SQLite and Hive, and responsive design principles.
+
+## Features
+
+- **Task Management**
+  - Create, read, update, and delete tasks
+  - Mark tasks as complete/incomplete
+  - Set task priorities and due dates
+  - Categorize tasks with custom labels
+  - Add task descriptions and attachments
+
+- **Technical Features**
+  - MVVM Architecture for clean separation of concerns
+  - Riverpod for state management
+  - SQLite for structured data storage
+  - Hive for high-performance key-value storage
+  - Responsive design that works across all screen sizes
+  - Offline-first architecture
+  - Dark/Light theme support
+
+## Architecture
+
+The app follows the MVVM (Model-View-ViewModel) architecture pattern:
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/task_management_app.git
+cd task_management_app
+```
 
-A few resources to get you started if this is your first Flutter project:
+2. **Install dependencies**
+```bash
+flutter pub get
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+3. **Run the database migrations**
+```bash
+flutter pub run build_runner build
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4. **Run the app**
+```bash
+flutter run
+```
